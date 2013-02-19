@@ -1,0 +1,12 @@
+﻿#ifndef QXGRAPHICS_GLOBAL_H
+#define QXGRAPHICS_GLOBAL_H
+
+#include <QtGlobal>
+
+#if defined(QXGRAPHICS_LIBRARY)
+#  define QXGRAPHICS_EXPORT Q_DECL_EXPORT
+#else
+#  define QXGRAPHICS_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // QXGRAPHICS_GLOBAL_H
