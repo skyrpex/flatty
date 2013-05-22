@@ -25,8 +25,6 @@ private slots:
     void setCurrentFrame(int frame);
 
 private:
-    void paintAnim(QPainter *painter, const QStyleOptionViewItem &option, Anim *anim, KeyFrames *keyFrames) const;
-
     int m_currentFrame;
 };
 

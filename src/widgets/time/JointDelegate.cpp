@@ -50,8 +50,16 @@ void JointDelegate::setEditorData(QWidget *editor, const QModelIndex &index) con
 
 void JointDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if(index.data().canConvert<KeyFrames *>())
-        paintAnim(painter, option, index.data(JointModel::AnimRole).value<Anim *>(), index.data().value<KeyFrames *>());
+    if(index.data().canConvert<KeyFrames *>()) {
+        Anim *anim = index.data(JointModel::AnimRole).value<Anim *>();
+        KeyFrames *keyFrames = index.data().value<KeyFrames *>();
+        KeyFramesEditor editor;
+        editor.setData(keyFrames->data, anim->frameCount(), m_currentFrame);
+
+        QRectF target = option.rect;
+        QRect source = option.rect.translated( -option.rect.topLeft() );
+        editor.render(painter, target, source);
+    }
     else
         QStyledItemDelegate::paint(painter, option, index);
 }
@@ -67,50 +75,6 @@ QSize JointDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIn
     }
 
     return QStyledItemDelegate::sizeHint(option, index).expandedTo(size);
-}
-
-void JointDelegate::paintAnim(QPainter *painter, const QStyleOptionViewItem &option, Anim *anim, KeyFrames *keyFrames) const
-{
-    Q_ASSERT(anim);
-    Q_ASSERT(keyFrames);
-
-    // Draw the background
-    painter->save();
-    painter->translate(option.rect.topLeft());
-    painter->fillRect(QRectF(QPointF(), option.rect.size()), QPixmap(":/images/background"));
-
-    QPixmap pixmap(":/images/keyframe");
-
-    // Draw the keyframes
-    if(anim)
-    {
-        foreach(int frame, keyFrames->data->keys())
-        {
-            int x = frame*pixmap.width();
-            QRectF rect(QPointF(x, 0), pixmap.size());
-            painter->fillRect(rect, pixmap);
-        }
-    }
-
-    // Draw time marker
-    int x = LineOffset + m_currentFrame*pixmap.width();
-    painter->setPen(LinePeN);
-    painter->drawLine(x, 0, x, pixmap.height()-1);
-    painter->restore();
-
-    // Disabled & offseted frames
-    painter->save();
-    painter->setCompositionMode(QPainter::CompositionMode_Multiply);
-
-    // Ofsetted frames are darker
-    QBrush brush(option.palette.base().color().darker(120));
-    int xOffset = (anim? anim->frameCount() : 0)*pixmap.width();
-    QRectF rect = option.rect.adjusted(xOffset, 0, 0, 0);
-    painter->fillRect(rect, brush);
-
-    // Gray out if disabled
-    painter->fillRect(option.rect, option.palette.base());
-    painter->restore();
 }
 
 void JointDelegate::setCurrentFrame(int frame)

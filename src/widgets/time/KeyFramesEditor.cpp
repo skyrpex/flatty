@@ -92,13 +92,13 @@ void KeyFramesEditor::drawBackground(QPainter *painter, const QRectF &rect)
 
     // Ofsetted frames are darkened
     painter->setCompositionMode(QPainter::CompositionMode_Multiply);
-    int left = (m_keyFrames? m_frameCount : 0)*FrameWidth;
-    QRectF r(QPointF(left, 0), QPointF(viewport()->width(), viewport()->height()));
-    painter->fillRect(r.intersected(rect), palette().base().color().darker(120));
+    int left = (m_keyFrames? m_frameCount : 0) * FrameWidth;
+    QRectF r( QPointF( left, 0 ), rect.bottomRight() );
+    painter->fillRect(r, palette().base().color().darker(120));
 
     // Gray out if disabled
     painter->setCompositionMode(QPainter::CompositionMode_Multiply);
-    painter->fillRect(sceneRect().intersected(rect), palette().base());
+    painter->fillRect(rect, palette().base());
 
     // Restore composition mode
     painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -107,6 +107,8 @@ void KeyFramesEditor::drawBackground(QPainter *painter, const QRectF &rect)
 void KeyFramesEditor::contextMenuEvent(QContextMenuEvent *event)
 {
     int frame = frameAt(event->pos(), false);
+    setCurrentFrame(frame);
+
     bool frameInRange = frame >= 0 && frame < m_frameCount;
     bool hasKeyFrame = m_keyFrames->contains(frame);
     QMenu menu;
@@ -137,21 +139,16 @@ void KeyFramesEditor::contextMenuEvent(QContextMenuEvent *event)
 void KeyFramesEditor::mousePressEvent(QMouseEvent *event)
 {
     int frame = frameAt(event->pos());
-    if(frame > 0)
-        QGraphicsView::mousePressEvent(event);
     setCurrentFrame(frame);
+
+    QGraphicsView::mousePressEvent(event);
 }
 
 void KeyFramesEditor::mouseMoveEvent(QMouseEvent *event)
 {
-    QGraphicsView::mouseMoveEvent(event);
-    if(event->buttons() & Qt::LeftButton)
-        setCurrentFrame(frameAt(event->pos()));
-}
+    setCurrentFrame(frameAt(event->pos()));
 
-void KeyFramesEditor::mouseReleaseEvent(QMouseEvent *event)
-{
-    QGraphicsView::mouseReleaseEvent(event);
+    QGraphicsView::mouseMoveEvent(event);
 }
 
 void KeyFramesEditor::dragEnterEvent(QDragEnterEvent *event)
@@ -187,6 +184,7 @@ void KeyFramesEditor::dropEvent(QDropEvent *event)
     {
         int frameFrom = frameAt(mime->keyFrameItem()->pos());
         int frameTo = frameAt(event->pos());
+        setCurrentFrame(frameTo);
 
         if(frameFrom != frameTo)
         {
