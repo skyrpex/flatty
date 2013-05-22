@@ -10,7 +10,6 @@ public:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // KEYFRAMEITEM_H
