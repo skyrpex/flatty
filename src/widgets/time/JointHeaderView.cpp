@@ -22,7 +22,11 @@ JointHeaderView::JointHeaderView(bool showTimeLine, QWidget *parent) :
     m_showTimeLine(showTimeLine)
 {
     // Make sure a scrollbar appears
+#if QT_VERSION >= 0x050000
+    setSectionResizeMode(ResizeToContents);
+#else
     setResizeMode(ResizeToContents);
+#endif
     setStretchLastSection(false);
 }
 
