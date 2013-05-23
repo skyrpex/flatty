@@ -34,13 +34,13 @@ AnimsWidget::AnimsWidget(AnimModel *model, QWidget *parent) :
     }
     layout->addWidget(m_view);
 
-    connect(m_view->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), SLOT(onCurrentRowChanged(QModelIndex)));
-    connect(m_view->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), SLOT(updateActions()));
+    connect(m_view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onCurrentChanged(QModelIndex)));
+    connect(m_view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(updateActions()));
 
     updateActions();
 }
 
-void AnimsWidget::onCurrentRowChanged(const QModelIndex &index)
+void AnimsWidget::onCurrentChanged(const QModelIndex &index)
 {
     emit currentAnimChanged(index.row());
 }
