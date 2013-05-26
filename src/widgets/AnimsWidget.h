@@ -17,13 +17,14 @@ public:
 
 signals:
     void currentAnimChanged(int i);
+    void currentAnimChanged(Anim *anim);
 
 private slots:
     void createAnim();
     void editAnim();
     void removeAnim();
     void updateActions();
-    void onCurrentRowChanged(const QModelIndex &index);
+    void onCurrentChanged(const QModelIndex &index);
 
 private:
     Anim *animFromUser();

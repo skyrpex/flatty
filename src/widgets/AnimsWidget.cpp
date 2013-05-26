@@ -34,15 +34,18 @@ AnimsWidget::AnimsWidget(AnimModel *model, QWidget *parent) :
     }
     layout->addWidget(m_view);
 
-    connect(m_view->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), SLOT(onCurrentRowChanged(QModelIndex)));
-    connect(m_view->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), SLOT(updateActions()));
+    connect(m_view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(onCurrentChanged(QModelIndex)));
+    connect(m_view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(updateActions()));
 
     updateActions();
 }
 
-void AnimsWidget::onCurrentRowChanged(const QModelIndex &index)
+void AnimsWidget::onCurrentChanged(const QModelIndex &index)
 {
     emit currentAnimChanged(index.row());
+
+    Anim *anim = static_cast<Anim *>(index.internalPointer());
+    emit currentAnimChanged(anim);
 }
 
 Anim *AnimsWidget::animFromUser()
@@ -83,9 +86,12 @@ void AnimsWidget::editAnim()
 
 void AnimsWidget::removeAnim()
 {
-    Anim *anim = static_cast<Anim *>(m_view->currentIndex().internalPointer());
+    QModelIndex index = m_view->currentIndex();
+    Anim *anim = static_cast<Anim *>(index.internalPointer());
     DeleteAnimCommand *command = new DeleteAnimCommand(m_model, anim);
     qApp->undoStack()->push(command);
+
+    m_view->setCurrentIndex(index);
 }
 
 void AnimsWidget::updateActions()
