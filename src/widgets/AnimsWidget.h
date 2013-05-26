@@ -17,6 +17,7 @@ public:
 
 signals:
     void currentAnimChanged(int i);
+    void currentAnimChanged(Anim *anim);
 
 private slots:
     void createAnim();

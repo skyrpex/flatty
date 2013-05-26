@@ -43,6 +43,9 @@ AnimsWidget::AnimsWidget(AnimModel *model, QWidget *parent) :
 void AnimsWidget::onCurrentChanged(const QModelIndex &index)
 {
     emit currentAnimChanged(index.row());
+
+    Anim *anim = static_cast<Anim *>(index.internalPointer());
+    emit currentAnimChanged(anim);
 }
 
 Anim *AnimsWidget::animFromUser()
