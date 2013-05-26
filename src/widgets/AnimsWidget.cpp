@@ -83,9 +83,12 @@ void AnimsWidget::editAnim()
 
 void AnimsWidget::removeAnim()
 {
-    Anim *anim = static_cast<Anim *>(m_view->currentIndex().internalPointer());
+    QModelIndex index = m_view->currentIndex();
+    Anim *anim = static_cast<Anim *>(index.internalPointer());
     DeleteAnimCommand *command = new DeleteAnimCommand(m_model, anim);
     qApp->undoStack()->push(command);
+
+    m_view->setCurrentIndex(index);
 }
 
 void AnimsWidget::updateActions()
