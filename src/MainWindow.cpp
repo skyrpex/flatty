@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
+    layout->setMargin(6);
     layout->addWidget(verticalSplitter);
 }
 

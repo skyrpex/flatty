@@ -131,8 +131,10 @@ void KeyFramesEditor::contextMenuEvent(QContextMenuEvent *event)
     }
     else if(action == removeAction)
     {
+        m_lineItem->setVisible( false );
         delete itemAt(event->pos());
         delete m_keyFrames->take(frame);
+        m_lineItem->setVisible( true );
     }
 }
 
