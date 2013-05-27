@@ -14,6 +14,7 @@ Anim::~Anim()
 {
     if(m_model)
         m_model->removeAnim(this);
+    qDeleteAll(m_keyFrames.values());
 }
 
 QString Anim::name() const

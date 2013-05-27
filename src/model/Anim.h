@@ -3,9 +3,12 @@
 
 #include <QString>
 #include <QMetaType>
+#include <QMap>
 
 class AnimModel;
 class Anim;
+class KeyFrames;
+class Joint;
 
 class Anim
 {
@@ -24,11 +27,13 @@ public:
 
 private:
     friend class AnimModel;
+    friend class JointModel;
 
     AnimModel *m_model;
     QString m_name;
     int m_frameCount;
     int m_fps;
+    QMap<Joint *, KeyFrames *> m_keyFrames;
 };
 
 Q_DECLARE_METATYPE(Anim*)

@@ -174,7 +174,12 @@ void JointModel::onAnimsInserted(const QModelIndex &parent, int first, int last)
         for(int i = first; i <= last; ++i)
         {
             Anim *anim = m_animModel->anims().at(i);
-            joint->m_anims.insert(anim, new KeyFrames);
+            KeyFrames *keyFrames = anim->m_keyFrames.value(joint);
+            if(!keyFrames) {
+                keyFrames = new KeyFrames;
+                anim->m_keyFrames.insert(joint, keyFrames);
+            }
+            joint->m_anims.insert(anim, keyFrames);
         }
 
         foreach(Joint *child, joint->children())
@@ -194,8 +199,10 @@ void JointModel::onAnimsAboutToBeRemoved(const QModelIndex &parent, int first, i
     while(!stack.isEmpty())
     {
         Joint *joint = stack.pop();
-        for(int i = first; i <= last; ++i)
-            delete joint->m_anims.take(m_animModel->anims().at(i));
+        for(int i = first; i <= last; ++i) {
+            Anim *anim = m_animModel->anims().at(i);
+            joint->m_anims.take(anim);
+        }
 
         foreach(Joint *child, joint->children())
             stack.push(child);
