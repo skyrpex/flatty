@@ -23,10 +23,10 @@ private slots:
     void createAnim();
     void editAnim();
     void removeAnim();
-    void updateActions();
     void onCurrentChanged(const QModelIndex &index);
 
 private:
+    void updateActions();
     Anim *animFromUser();
 
     AnimModel *m_model;
