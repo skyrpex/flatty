@@ -86,7 +86,7 @@ TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
 
 void TimeWidget::setCurrentAnim(int i)
 {
-    bool hasAnim = (i != -1);
+    bool hasAnim = (i >= 0 && i < m_model->animModel()->anims().count());
 
     // Update current anim
     m_currentAnim = hasAnim?
