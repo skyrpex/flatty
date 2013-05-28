@@ -71,10 +71,10 @@ void JointHeaderView::paintSection(QPainter *painter, const QRect &rect, int log
     painter->setPen(QPen(Qt::lightGray));
     int frameCount = rect.width()/FrameWidth;
     QVector<QLineF> lines(frameCount+1);
-    for(int i = 0; i <= frameCount; ++i)
+    for(int i = 1; i <= frameCount; ++i)
     {
         int x = i*FrameWidth;
-        lines[i] = QLineF(x, rect.height()-6, x, rect.height()-2);
+        lines[i] = QLineF(x-1, rect.height()-6, x-1, rect.height()-2);
     }
     painter->drawLines(lines);
 
@@ -82,7 +82,7 @@ void JointHeaderView::paintSection(QPainter *painter, const QRect &rect, int log
     // Red square (time marker)
     painter->setBrush(MarkerBrush);
     painter->setPen(MarkerPen);
-    painter->drawRect(QRect(m_currentFrame*FrameWidth, 0, FrameWidth, rect.height()-2));
+    painter->drawRect(QRect(m_currentFrame*FrameWidth-1, 0, FrameWidth, rect.height()-2));
 
 
     // Draw 1
