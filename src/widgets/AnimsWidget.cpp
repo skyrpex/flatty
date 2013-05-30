@@ -94,9 +94,7 @@ void AnimsWidget::removeAnim()
     DeleteAnimCommand *command = new DeleteAnimCommand(m_model, anim);
     qApp->undoStack()->push(command);
 
-    int newRow = qBound(0, row, m_model->anims().count() - 1);
-    m_view->setCurrentIndex(m_view->indexAt(QPoint(newRow, 0)));
-    emit currentAnimChanged(newRow);
+    emit currentAnimChanged(m_view->currentIndex().row());
 }
 
 void AnimsWidget::updateActions()
